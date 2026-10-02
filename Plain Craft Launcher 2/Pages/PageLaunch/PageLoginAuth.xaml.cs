@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using PCL.Core.App;
 using PCL.Core.App.Localization;
@@ -24,6 +24,7 @@ public partial class PageLoginAuth
 
     internal static readonly IReadOnlyDictionary<string, string> PredefinedAuthServers = new Dictionary<string, string>
     {
+        { "MUA Union", PCL.Core.Conduit.ClubCatalog.MuaAuth },
         { Lang.Text("Launch.Account.Auth.Preset.LittleSkin"), DefaultAuthServer },
         { Lang.Text("Common.Option.Customize"), "" }
     };
@@ -52,8 +53,13 @@ public partial class PageLoginAuth
         BtnLink.Click += Btn_Click;
     }
 
-    private void Reload()
+    public void Reload()
     {
+        if (!string.Equals(_authServerUrl, draggedAuthServer, StringComparison.OrdinalIgnoreCase))
+        {
+            TextName.Text = "";
+            TextPass.Password = "";
+        }
         _authServerUrl = draggedAuthServer ?? "";
         var knownOAuthSupport = draggedAuthServerOAuthSupported;
         draggedAuthServer = null;

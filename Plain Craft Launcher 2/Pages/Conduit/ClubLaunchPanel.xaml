@@ -1,0 +1,44 @@
+<UserControl x:Class="PCL.ClubLaunchPanel"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:PCL">
+ <StackPanel>
+  <local:MyCard Title="潮涌核心社 · Conduit Club" Margin="0,0,0,15">
+   <StackPanel Margin="24,42,24,22">
+    <TextBlock Text="五湖四海之士，汇于东海之滨" FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource ColorBrush2}" />
+    <TextBlock Margin="0,12,0,18" Text="在 SMP 生存服共同建设，在 Create 创造建筑服打磨作品，在 SHOU 留下校园与记忆。欢迎来到潮涌核心社。" TextWrapping="Wrap" />
+    <WrapPanel>
+     <local:MyButton Text="社团 Wiki" Height="34" Margin="0,0,10,0" Padding="14,0" local:CustomEventService.EventType="OpenUrl" local:CustomEventService.EventData="https://conduit-club.github.io/" />
+     <local:MyButton Text="登录与入服指南" Height="34" Margin="0,0,10,0" Padding="14,0" local:CustomEventService.EventType="OpenUrl" local:CustomEventService.EventData="https://conduit-club.github.io/servers/velocity/" />
+     <TextBlock Text="QQ群 756155087" VerticalAlignment="Center" />
+    </WrapPanel>
+   </StackPanel>
+  </local:MyCard>
+  <local:MyCard Title="我的账户" Margin="0,0,0,15">
+   <StackPanel Margin="24,40,24,20">
+    <TextBlock x:Name="EmptyHint" Text="选择下方登录方式添加账户；已有账户可在列表中一键切换。" TextWrapping="Wrap" Margin="0,0,0,8" />
+    <ItemsControl x:Name="Accounts">
+     <ItemsControl.ItemTemplate><DataTemplate>
+      <local:MyListItem Title="{Binding Title}" Info="{Binding Source}" Tag="{Binding Profile}" Type="Clickable" SvgIcon="lucide/user" Click="Account_Click" Margin="0,2" />
+     </DataTemplate></ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <WrapPanel Margin="0,12,0,0">
+     <local:MyButton Text="微软正版" Tag="microsoft" Click="Add_Click" Height="34" Padding="12,0" Margin="0,0,8,8" />
+     <local:MyButton Text="MUA Union" Tag="mua" Click="Add_Click" Height="34" Padding="12,0" Margin="0,0,8,8" />
+     <local:MyButton Text="LittleSkin" Tag="littleskin" Click="Add_Click" Height="34" Padding="12,0" Margin="0,0,8,8" />
+     <local:MyButton Text="其他方式" Tag="other" Click="Add_Click" Height="34" Padding="12,0" Margin="0,0,8,8" />
+    </WrapPanel>
+    <WrapPanel Margin="0,0,0,10">
+     <local:MyButton Text="微软登录配置" Click="MicrosoftConfig_Click" Height="30" Padding="10,0" Margin="0,0,10,0" />
+     <TextBlock x:Name="MicrosoftStatus" VerticalAlignment="Center" FontSize="12" />
+    </WrapPanel>
+    <TextBlock Text="第三方账户通过各自认证服务登录；MultiLogin 由社团代理服处理，不会把不同来源的身份自动合并。" FontSize="12" TextWrapping="Wrap" Opacity="0.7" />
+   </StackPanel>
+  </local:MyCard>
+  <local:MyCard Title="启动后前往" Margin="0,0,0,15">
+   <StackPanel Margin="24,42,24,20">
+    <local:MyComboBox x:Name="Servers" DisplayMemberPath="DisplayName" SelectedValuePath="Id" SelectionChanged="Server_Changed" />
+    <TextBlock Text="选择左侧 Minecraft 1.21.1 实例，再点击启动游戏。选择服务器后会自动连接对应公开入口；也可只启动游戏。" TextWrapping="Wrap" Margin="0,12,0,0" />
+   </StackPanel>
+  </local:MyCard>
+ </StackPanel>
+</UserControl>

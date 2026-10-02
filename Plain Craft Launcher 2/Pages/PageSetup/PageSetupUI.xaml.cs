@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,10 +12,18 @@ namespace PCL;
 
 public partial class PageSetupUI
 {
-    public string[] ThemeColors => Basics.IsAprilFool 
-        ? [Lang.Text("Setup.Ui.Theme.Color.SkyBlue"), Lang.Text("Setup.Ui.Theme.Color.CatBlue"), Lang.Text("Setup.Ui.Theme.Color.CrashBlue"), Lang.Text("Setup.Ui.Theme.Color.Hmcl")]
-        : [Lang.Text("Setup.Ui.Theme.Color.SkyBlue"), Lang.Text("Setup.Ui.Theme.Color.CatBlue"), Lang.Text("Setup.Ui.Theme.Color.CrashBlue")];
-    
+    private ColorTheme[] AvailableThemes => Basics.IsAprilFool
+        ? [ColorTheme.SkyBlue, ColorTheme.CatBlue, ColorTheme.DeathBlue, ColorTheme.HmclBlue, ColorTheme.Diana]
+        : [ColorTheme.SkyBlue, ColorTheme.CatBlue, ColorTheme.DeathBlue, ColorTheme.Diana];
+    public string[] ThemeColors => AvailableThemes.Select(theme => theme switch
+    {
+        ColorTheme.SkyBlue => Lang.Text("Setup.Ui.Theme.Color.SkyBlue"),
+        ColorTheme.CatBlue => Lang.Text("Setup.Ui.Theme.Color.CatBlue"),
+        ColorTheme.DeathBlue => Lang.Text("Setup.Ui.Theme.Color.CrashBlue"),
+        ColorTheme.HmclBlue => Lang.Text("Setup.Ui.Theme.Color.Hmcl"),
+        _ => "嘉然配色"
+    }).ToArray();
+
     public new bool isLoaded;
 
     public PageSetupUI()
@@ -41,7 +49,7 @@ public partial class PageSetupUI
 
         SliderLoad();
 
-        PanLauncherHide.Visibility = Visibility.Visible;
+        PanLauncherHide.Visibility = Visibility.Collapsed;
     }
 
     public void Reload()
@@ -52,8 +60,8 @@ public partial class PageSetupUI
             SliderLauncherOpacity.Value = Config.Preference.Theme.WindowOpacity;
             CheckLauncherLogo.Checked = Config.Preference.ShowStartupLogo;
             ComboDarkMode.SelectedIndex = (int)Config.Preference.Theme.ColorMode;
-            ComboDarkColor.SelectedIndex = (int)Config.Preference.Theme.DarkColor;
-            ComboLightColor.SelectedIndex = (int)Config.Preference.Theme.LightColor;
+            ComboDarkColor.SelectedIndex = Array.IndexOf(AvailableThemes, Config.Preference.Theme.DarkColor);
+            ComboLightColor.SelectedIndex = Array.IndexOf(AvailableThemes, Config.Preference.Theme.LightColor);
             CheckShowLaunchingHint.Checked = Config.Preference.ShowLaunchingHint;
 
             // 字体设置
@@ -663,7 +671,8 @@ public partial class PageSetupUI
     private void ThemeColor_Change(object senderRaw, SelectionChangedEventArgs e)
     {
         var sender = (MyComboBox)senderRaw;
-        SetByTag(sender.Tag?.ToString(), sender.SelectedIndex);
+        if (sender.SelectedIndex < 0 || sender.SelectedIndex >= AvailableThemes.Length) return;
+        SetByTag(sender.Tag?.ToString(), (int)AvailableThemes[sender.SelectedIndex]);
         ThemeManager.ThemeRefresh();
     }
 

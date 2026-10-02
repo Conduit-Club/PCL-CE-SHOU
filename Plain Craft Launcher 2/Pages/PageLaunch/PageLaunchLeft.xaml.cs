@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -236,7 +236,13 @@ public partial class PageLaunchLeft
                     return;
                 }
 
-                ModLaunch.McLaunchStart();
+                var destination = PCL.Core.Conduit.ClubCatalog.FindServer(Config.System.ClubServer);
+                if (destination.Id != "none" && ProfileService.Current is { } profile && !PCL.Core.Conduit.ClubCatalog.CanJoin(profile))
+                {
+                    HintService.Hint("社团服务器需要微软正版、MUA Union 或 LittleSkin 账户，请先切换账户。", HintType.Error);
+                    return;
+                }
+                ModLaunch.McLaunchStart(new ModLaunch.McLaunchOptions { ServerIp = destination.Address, UseClubAccount = destination.Id != "none" });
                 break;
             }
             case LaunchButtonAction.Download:
@@ -819,7 +825,11 @@ public partial class PageLaunchLeft
 
         // 刷新页面
         if (pageCurrent == type)
+        {
+            if (type == PageType.ProfileSkin) ModMain.frmLoginProfileSkin?.Reload();
+            if (type == PageType.Auth && targetLoginType == ModLaunch.McLoginType.Auth) ModMain.frmLoginAuth?.Reload();
             return;
+        }
         PageChange(type, anim);
     }
 

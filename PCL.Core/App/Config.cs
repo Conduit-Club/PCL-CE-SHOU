@@ -13,6 +13,8 @@ public static partial class Config
     /// </summary>
     [ConfigGroup("System")] partial class SystemConfigGroup
     {
+        [ConfigItem<string>("ConduitServer", "none")] public partial string ClubServer { get; set; }
+        [ConfigItem<string>("ConduitMicrosoftClientId", "")] public partial string ClubMicrosoftClientId { get; set; }
         // /// <summary>
         // /// 系统缓存目录。
         // /// </summary>
@@ -268,12 +270,12 @@ public static partial class Config
             /// <summary>
             /// 暗色配色主题。
             /// </summary>
-            [ConfigItem<ColorTheme>("UiDarkColor", ColorTheme.CatBlue)] public partial ColorTheme DarkColor { get; set; }
+            [ConfigItem<ColorTheme>("UiDarkColor", ColorTheme.Diana)] public partial ColorTheme DarkColor { get; set; }
 
             /// <summary>
             /// 亮色配色主题。
             /// </summary>
-            [ConfigItem<ColorTheme>("UiLightColor", ColorTheme.CatBlue)] public partial ColorTheme LightColor { get; set; }
+            [ConfigItem<ColorTheme>("UiLightColor", ColorTheme.Diana)] public partial ColorTheme LightColor { get; set; }
 
             /// <summary>
             /// 窗口透明度。

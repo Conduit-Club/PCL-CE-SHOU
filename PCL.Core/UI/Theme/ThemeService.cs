@@ -157,6 +157,7 @@ public sealed partial class ThemeService
             ColorTheme.CatBlue => (255, 0, -0.2),
             ColorTheme.DeathBlue => (268, -0.05, -0.1),
             ColorTheme.HmclBlue => (275, -0.03, -0.35),
+            ColorTheme.Diana => (15, 0, -0.4),
 #if DEBUG
             _ => ((int)theme, 0, 0)
 #else
@@ -240,7 +241,9 @@ public sealed partial class ThemeService
     /// </summary>
     public static void ApplyColorResources()
     {
+        ApplyGrayResources(); // Switching away from Diana must restore neutral colors too.
         var colors = _CalculateColors(CurrentTone, GetCurrentThemeArgs());
         foreach (var c in colors) c.Apply();
+        if (CurrentTheme == ColorTheme.Diana) DianaPalette.Apply(IsDarkMode);
     }
 }

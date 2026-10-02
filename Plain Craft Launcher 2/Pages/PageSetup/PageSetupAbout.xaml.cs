@@ -45,7 +45,7 @@ public partial class PageSetupAbout
             RowMcmod.Height = new GridLength(0);
         }
 
-        LoadContributersAsync();
+        // 社团贡献者为固定署名；上游归属与许可证另行保留。
     }
 
     private async void LoadContributersAsync()
