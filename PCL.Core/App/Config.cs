@@ -207,6 +207,11 @@ public static partial class Config
         [ConfigItem<bool>("UiShowLaunchingHint", true, ConfigSource.Local)] public partial bool ShowLaunchingHint { get; set; }
 
         /// <summary>
+        /// 启动后检查社团网站更新日志。
+        /// </summary>
+        [ConfigItem<bool>("ConduitUpdateNotice", true, ConfigSource.Local)] public partial bool ClubUpdateNoticeEnabled { get; set; }
+
+        /// <summary>
         /// 标题内容类型。
         /// </summary>
         [ConfigItem<LauncherTitleType>("UiLogoType", LauncherTitleType.Default, ConfigSource.Local)] public partial LauncherTitleType WindowTitleType { get; set; }

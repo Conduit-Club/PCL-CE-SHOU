@@ -63,6 +63,7 @@ public partial class PageSetupUI
             ComboDarkColor.SelectedIndex = Array.IndexOf(AvailableThemes, Config.Preference.Theme.DarkColor);
             ComboLightColor.SelectedIndex = Array.IndexOf(AvailableThemes, Config.Preference.Theme.LightColor);
             CheckShowLaunchingHint.Checked = Config.Preference.ShowLaunchingHint;
+            CheckClubUpdateNotice.Checked = Config.Preference.ClubUpdateNoticeEnabled;
 
             // 字体设置
             ComboUiFont.SelectedFontTag = Config.Preference.Font;

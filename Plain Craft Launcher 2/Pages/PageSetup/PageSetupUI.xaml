@@ -71,6 +71,11 @@
                         <local:MyCheckBox Text="{DynamicResource Setup.Ui.Basic.ShowTriviaHint}" Margin="-1,0,0,7" Height="22"
                                            x:Name="CheckShowLaunchingHint" Tag="UiShowLaunchingHint"
                                            Change="CheckBoxChange" />
+                        <local:MyCheckBox Text="启动时提示社团更新日志" Margin="-1,0,0,4" Height="22"
+                                          x:Name="CheckClubUpdateNotice" Tag="ConduitUpdateNotice"
+                                          Change="CheckBoxChange" />
+                        <TextBlock Text="开启后在启动完成时后台检查社团网站；网络失败会静默跳过，已展示过的日期不会重复提示。"
+                                   TextWrapping="Wrap" Opacity="0.75" Margin="0,0,0,10" />
                         <StackPanel x:Name="PanelBlur" Margin="0,0,0,10">
                             <local:MyCheckBox Text="{DynamicResource Setup.Ui.Basic.AdvancedMaterial}" Height="22" x:Name="CheckBlur" Tag="UiBlur"
                                               ToolTip="{DynamicResource Setup.Ui.Basic.AdvancedMaterial.ToolTip}"
