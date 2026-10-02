@@ -23,7 +23,7 @@
         <Platforms>AnyCPU;x64;ARM64</Platforms>
         <ImplicitUsings>enable</ImplicitUsings>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-        <ApplicationIcon>Images\icon.ico</ApplicationIcon>
+        <ApplicationIcon>Images\Conduit\club.ico</ApplicationIcon>
         <AssemblyTitle>Plain Craft Launcher Community Edition</AssemblyTitle>
         <Description>Minecraft 启动器 (作者: 龙腾猫跃; 经社区二次开发版本)</Description>
         <Product>Plain Craft Launcher Community Edition</Product>

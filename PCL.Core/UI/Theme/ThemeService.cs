@@ -58,6 +58,14 @@ public sealed partial class ThemeService
     [LifecycleStart]
     private static void _Start()
     {
+        // Apply the club default once when upgrading from a CE/early club configuration.
+        // Subsequent user choices are retained.
+        if (!Config.Preference.Theme.ClubDianaDefaultApplied)
+        {
+            Config.Preference.Theme.LightColor = ColorTheme.Diana;
+            Config.Preference.Theme.DarkColor = ColorTheme.Diana;
+            Config.Preference.Theme.ClubDianaDefaultApplied = true;
+        }
         IsDarkMode = _IsDarkMode();
         _LogStatus();
         _RefreshAll();

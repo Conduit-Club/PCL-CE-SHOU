@@ -20,6 +20,9 @@ public static class UpdateManager
     public static void ShowCEAnnounce() { }
     internal static void DownloadLatestPCL(ModLoader.LoaderBase loaderToSyncProgress = null)
     {
+        // A development apphost depends on adjacent DLLs and cannot be shipped on its own.
+        if (!string.IsNullOrEmpty(typeof(UpdateManager).Assembly.Location))
+            throw new InvalidOperationException("当前是开发构建，不能单独随整合包分发。请使用社团发布的自包含单文件版本，或取消“附带启动器”。");
         // 整合包随附当前已验证的社团启动器，绝不下载 CE 替换它。
         ModBase.CopyFile(Basics.ExecutablePath, Path.Combine(ModBase.pathTemp, "CE-Latest.exe"));
     }

@@ -35,6 +35,17 @@ public partial class PageLoginAuth
     private bool _hasRegisterLink;
     private bool _loginModeInitialized;
     private string _authServerUrl = "";
+    public bool IsAuthenticating { get; private set; }
+
+    public void ClearEditing()
+    {
+        if (IsAuthenticating) return;
+        _authServerUrl = "";
+        draggedAuthServer = null;
+        draggedAuthServerOAuthSupported = null;
+        TextName.Text = "";
+        TextPass.Password = "";
+    }
 
     public PageLoginAuth()
     {
@@ -55,6 +66,8 @@ public partial class PageLoginAuth
 
     public void Reload()
     {
+        // Loaded can follow an explicit refresh. Do not consume the pending server twice.
+        if (draggedAuthServer is null || IsAuthenticating) return;
         if (!string.Equals(_authServerUrl, draggedAuthServer, StringComparison.OrdinalIgnoreCase))
         {
             TextName.Text = "";
@@ -93,6 +106,7 @@ public partial class PageLoginAuth
 
     private void BtnLogin_Click(object sender, EventArgs e)
     {
+        if (IsAuthenticating) return;
         if (string.IsNullOrWhiteSpace(_authServerUrl))
         {
             HintService.Hint(Lang.Text("Launch.Account.Auth.EmptyFields"), HintType.Error);
@@ -105,6 +119,7 @@ public partial class PageLoginAuth
             return;
         }
 
+        IsAuthenticating = true;
         BtnLogin.IsEnabled = false;
         BtnOAuth.IsEnabled = false;
         BtnBack.IsEnabled = false;
@@ -195,6 +210,7 @@ public partial class PageLoginAuth
 
     private void _FinishLoginAttempt()
     {
+        IsAuthenticating = false;
         ProfileService.IsCreatingProfile = false;
         BtnLogin.IsEnabled = true;
         BtnOAuth.IsEnabled = true;
@@ -396,7 +412,9 @@ public partial class PageLoginAuth
 
     private void BtnWebsite_Click(object sender, EventArgs e)
     {
-        var websiteUri = new UriBuilder(new Uri(_authServerUrl))
+        if (!Uri.TryCreate(_authServerUrl, UriKind.Absolute, out var serverUri)
+            || serverUri.Scheme is not ("https" or "http")) return;
+        var websiteUri = new UriBuilder(serverUri)
         {
             Path = "/",
             Query = "",

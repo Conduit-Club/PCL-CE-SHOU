@@ -136,6 +136,10 @@
             </local:MyCard>
             <local:MyCard x:Name="CardBackground" Margin="0,0,0,15" Title="{DynamicResource Setup.Ui.Background.TitleDefault}">
                 <StackPanel Margin="25,40,25,20">
+                    <local:MyCheckBox x:Name="CheckClubHomeSlideshow" Text="首页社团实景轮播" Tag="ConduitHomeSlideshow"
+                                      Change="CheckBoxChange" Height="24" Margin="-1,0,0,6" />
+                    <TextBlock Text="默认开启：校园湖畔、生存服主城与创造服雕像。每 15 秒淡入切换，背景轻度虚化；关闭后恢复主题背景。"
+                               TextWrapping="Wrap" Opacity="0.75" Margin="0,0,0,16" />
                     <Grid x:Name="PanBackgroundSuit" Height="28" Margin="0,0,0,10" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />

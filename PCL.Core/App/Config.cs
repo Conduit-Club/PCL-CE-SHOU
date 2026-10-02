@@ -262,6 +262,7 @@ public static partial class Config
         /// </summary>
         [ConfigGroup("Theme")] partial class ThemeConfigGroup
         {
+            [ConfigItem<bool>("ConduitDianaDefaultApplied", false, ConfigSource.Local)] public partial bool ClubDianaDefaultApplied { get; set; }
             /// <summary>
             /// 配色主题模式。
             /// </summary>
@@ -313,6 +314,7 @@ public static partial class Config
         /// </summary>
         [ConfigGroup("Background")] partial class BackgroundConfigGroup
         {
+            [ConfigItem<bool>("ConduitHomeSlideshow", true, ConfigSource.Local)] public partial bool ClubHomeSlideshow { get; set; }
             /// <summary>
             /// 彩色底部填充。
             /// </summary>

@@ -97,6 +97,31 @@ public class ClubIntegrationTest
     }
 
     [TestMethod]
+    public void BackfilledOldReleaseDoesNotHideNewerVersion()
+    {
+        var json = JsonSerializer.Serialize(new[]
+        {
+            new { draft = false, published_at = "2026-10-05T00:00:00Z", tag_name = "conduit-v2.15.1-club.1", html_url = ClubCatalog.Repository + "/releases/tag/conduit-v2.15.1-club.1", name = "backfill", body = "" },
+            new { draft = false, published_at = "2026-10-02T00:00:00Z", tag_name = "conduit-v2.15.1-club.10", html_url = ClubCatalog.Repository + "/releases/tag/conduit-v2.15.1-club.10", name = "latest", body = "" },
+            new { draft = false, published_at = "2026-10-04T00:00:00Z", tag_name = "conduit-v2.15.1-club.2", html_url = ClubCatalog.Repository + "/releases/tag/conduit-v2.15.1-club.2", name = "older", body = "" }
+        });
+        Assert.AreEqual("conduit-v2.15.1-club.10", ClubRelease.ParseLatest(json)!.Tag);
+    }
+
+    [TestMethod]
+    public void AccountStatusDoesNotClaimUnverifiedCredentialsAreOnline()
+    {
+        var profile = new McProfile { ProfileType = ProfileType.Microsoft };
+        Assert.AreEqual("需要重新登录", ClubCatalog.AccountStatus(profile));
+        profile.AccessToken = "test-not-a-real-token";
+        Assert.AreEqual("已保存 · 启动时验证", ClubCatalog.AccountStatus(profile));
+        profile.ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(-2);
+        Assert.AreEqual("凭据已过期 · 启动时刷新", ClubCatalog.AccountStatus(profile));
+        profile.ProfileType = ProfileType.Offline;
+        Assert.AreEqual("本地档案", ClubCatalog.AccountStatus(profile));
+    }
+
+    [TestMethod]
     public void DianaTextAndSurfaceHaveReadableContrastInBothModes()
     {
         foreach (var dark in new[] { false, true })

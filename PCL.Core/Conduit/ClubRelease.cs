@@ -19,6 +19,7 @@ public sealed record ClubRelease(string Tag, string Title, string Notes, string 
     public static ClubRelease? ParseLatest(string json)
     {
         using var document = JsonDocument.Parse(json);
+        ClubRelease? latest = null;
         foreach (var release in document.RootElement.EnumerateArray()
                      .Where(r => !r.GetProperty("draft").GetBoolean())
                      .OrderByDescending(r => r.GetProperty("published_at").GetDateTimeOffset()))
@@ -27,8 +28,9 @@ public sealed record ClubRelease(string Tag, string Title, string Notes, string 
             var url = release.GetProperty("html_url").GetString() ?? "";
             if (!tag.StartsWith("conduit-v", StringComparison.Ordinal) || !SemVer.TryParse(tag[9..], out _)
                 || !url.StartsWith(ClubCatalog.Repository + "/releases/tag/", StringComparison.Ordinal)) continue;
-            return new ClubRelease(tag, release.GetProperty("name").GetString() ?? tag, release.GetProperty("body").GetString() ?? "", url);
+            var candidate = new ClubRelease(tag, release.GetProperty("name").GetString() ?? tag, release.GetProperty("body").GetString() ?? "", url);
+            if (latest is null || candidate.IsNewerThan(latest.Tag)) latest = candidate;
         }
-        return null;
+        return latest;
     }
 }

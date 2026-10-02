@@ -55,4 +55,12 @@ public static class ClubCatalog
         _ when IsProvider(profile.Server, LittleSkinAuth) => "LittleSkin",
         _ => "第三方 · " + (profile.ServerName ?? profile.Server ?? "自定义认证")
     };
+
+    public static string AccountStatus(McProfile profile)
+    {
+        if (profile.ProfileType == ProfileType.Offline) return "本地档案";
+        if (profile.IsExpired) return "凭据已过期 · 启动时刷新";
+        if (string.IsNullOrWhiteSpace(profile.AccessToken)) return "需要重新登录";
+        return "已保存 · 启动时验证";
+    }
 }

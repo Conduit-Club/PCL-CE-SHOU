@@ -67,7 +67,7 @@
                         x:Name="ImgPCLLogo"
                         Grid.Row="2"
                         Margin="3" MouseLeftButtonDown="ImgPCLLogo_Click"
-                        Source="/Plain Craft Launcher 2;component/Images/Heads/Logo-CE.png">
+                        Source="/Plain Craft Launcher 2;component/Images/Conduit/club-logo.png">
                         <Image.Clip>
                             <EllipseGeometry
                                 Center="17 17"
@@ -109,7 +109,7 @@
                         Grid.Row="2"
                         Grid.Column="2"
                         Height="35"
-                        local:CustomEventService.EventData="https://github.com/PCL-Community/PCL-CE"
+                        local:CustomEventService.EventData="https://github.com/Conduit-Club/PCL-CE-SHOU"
                         local:CustomEventService.EventType="OpenUrl"
                         Text="{DynamicResource Setup.About.SourceCode}" />
                 </Grid>

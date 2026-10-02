@@ -76,6 +76,7 @@ public partial class PageSetupUI
             CheckLockWindowSize.Checked = Config.Preference.LockWindowSize;
 
             // 背景图片
+            CheckClubHomeSlideshow.Checked = Config.Preference.Background.ClubHomeSlideshow;
             SliderBackgroundOpacity.Value = Config.Preference.Background.WallpaperOpacity;
             SliderBackgroundBlur.Value = Config.Preference.Background.WallpaperBlurRadius;
             ComboBackgroundSuit.SelectedIndex = Config.Preference.Background.WallpaperSuitMode;

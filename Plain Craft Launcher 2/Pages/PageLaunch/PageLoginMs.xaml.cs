@@ -7,6 +7,7 @@ namespace PCL;
 
 public partial class PageLoginMs
 {
+    public bool IsAuthenticating { get; private set; }
     public PageLoginMs()
     {
         // Handles
@@ -23,6 +24,8 @@ public partial class PageLoginMs
 
     private void BtnLogin_Click(object sender, EventArgs e)
     {
+        if (IsAuthenticating) return;
+        IsAuthenticating = true;
         BtnLogin.IsEnabled = false;
         BtnBack.Visibility = Visibility.Collapsed;
         BtnLogin.Text = Lang.Number(0d, "P0");
@@ -91,6 +94,7 @@ public partial class PageLoginMs
                 ProfileService.IsCreatingProfile = false;
                 ModBase.RunInUi(() =>
                 {
+                    IsAuthenticating = false;
                     BtnLogin.IsEnabled = true;
                     BtnBack.Visibility = Visibility.Visible;
                     BtnLogin.Text = Lang.Text("Launch.Account.Login");

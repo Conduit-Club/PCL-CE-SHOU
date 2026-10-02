@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -230,6 +230,11 @@ public partial class PageLaunchLeft
         {
             case LaunchButtonAction.Launch:
             {
+                if (ProfileService.IsCreatingProfile || ModMain.frmLoginMs?.IsAuthenticating == true || ModMain.frmLoginAuth?.IsAuthenticating == true)
+                {
+                    HintService.Hint("请先完成下方登录，或选择已保存的账户。", HintType.Error);
+                    return;
+                }
                 if (File.Exists(ModInstanceList.McMcInstanceSelected.PathInstance + ".pclignore"))
                 {
                     HintService.Hint(Lang.Text("Launch.Home.Instance.InstallingCannotLaunch"), HintType.Error);
@@ -772,6 +777,7 @@ public partial class PageLaunchLeft
             else
             {
                 // 无动画
+                PanLogin.Opacity = 1d;
                 ModAnimation.AniControlEnabled += 1;
                 PanLogin.Children.Clear();
                 PanLogin.Children.Add((UIElement)pageNew);
