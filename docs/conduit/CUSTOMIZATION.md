@@ -27,7 +27,7 @@
 
 更新管理器和更新页面已改为社团手动发行检查，属于与上游差异最大的部分。上游若调整这些文件，需按 AGENTS.md 逐项合并，不直接覆盖社团行为。账号缓存、实例认证优先级和主题索引是需要特别回归的接口。
 
-当前版本标识为 `conduit-v2.15.1-club.1`；发布新版本时同步调整 `ClubRelease.CurrentTag` 与 `metadata.json` 中的版本。不要使用比当前版本更低的标签发布更新。
+当前首发准备版本为 `v1.0.0`，发行代号为 `zst`，正式标签为 `v1.0.0`；发布新版本时同步调整 `ClubRelease.CurrentTag`、`ClubRelease.CurrentCodename` 与 `metadata.json` 中的版本。旧 `conduit-v2.15.1-club.*` 标签仅作为迁移基线，不得让更新检查把它们判定为高于正式首发版本。
 
 ## 验证边界
 

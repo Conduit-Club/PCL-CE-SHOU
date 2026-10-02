@@ -20,6 +20,10 @@ public static class ClubCatalog
     public const string MuaAuth = "https://skin.mualliance.ltd/api/yggdrasil";
     public const string MuaUnionAuth = "https://skin.mualliance.ltd/api/union/yggdrasil";
     public const string LittleSkinAuth = "https://littleskin.cn/api/yggdrasil";
+    // The public client ID is configured, but the club application is not yet
+    // approved for Microsoft authentication. Keep this gate explicit until
+    // the application review and API access are complete.
+    public const bool MicrosoftApiReady = false;
     public static IReadOnlyList<ClubServer> Servers { get; } = Array.AsReadOnly(new[]
     {
         new ClubServer("none", "只启动游戏", ""),

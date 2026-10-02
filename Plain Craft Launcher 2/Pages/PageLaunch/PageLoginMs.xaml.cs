@@ -1,6 +1,7 @@
 ﻿using System.Security.Authentication;
 using System.Windows;
 using PCL.Core.App.Localization;
+using PCL.Core.Conduit;
 using PCL.Core.Minecraft.Profile;
 
 namespace PCL;
@@ -14,6 +15,14 @@ public partial class PageLoginMs
         InitializeComponent();
         BtnBack.Click += BtnBack_Click;
         BtnLogin.Click += BtnLogin_Click;
+        Loaded += (_, _) => RefreshAvailability();
+    }
+
+    private void RefreshAvailability()
+    {
+        var available = ClubCatalog.MicrosoftApiReady;
+        BtnLogin.IsEnabled = available;
+        MicrosoftUnavailable.Visibility = available ? Visibility.Collapsed : Visibility.Visible;
     }
 
     private void BtnBack_Click(object sender, EventArgs e)
@@ -24,6 +33,11 @@ public partial class PageLoginMs
 
     private void BtnLogin_Click(object sender, EventArgs e)
     {
+        if (!ClubCatalog.MicrosoftApiReady)
+        {
+            HintService.Hint("社团 Microsoft 登录尚未开通，API 申请与配置仍在处理中，请先使用 LittleSkin 或 MUA。", HintType.Warning);
+            return;
+        }
         if (IsAuthenticating) return;
         IsAuthenticating = true;
         BtnLogin.IsEnabled = false;

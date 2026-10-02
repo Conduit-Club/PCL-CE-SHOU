@@ -91,13 +91,14 @@ public class ClubIntegrationTest
         var json = JsonSerializer.Serialize(new object[]
         {
             new { draft = true, published_at = (string?)null, tag_name = "conduit-v9.0.0", html_url = "", name = "draft", body = "" },
-            new { draft = false, published_at = "2026-10-03T00:00:00Z", tag_name = "v9.0.0", html_url = ClubCatalog.Repository + "/releases/tag/v9.0.0", name = "upstream", body = "" },
+            new { draft = false, published_at = "2026-10-03T00:00:00Z", tag_name = "v9.0.0", html_url = "https://github.com/PCL-Community/PCL-CE/releases/tag/v9.0.0", name = "upstream", body = "" },
             new { draft = false, published_at = "2026-10-02T00:00:00Z", tag_name = "conduit-v2.15.1-club.2", html_url = ClubCatalog.Repository + "/releases/tag/conduit-v2.15.1-club.2", name = "club", body = "notes" }
         });
         var release = ClubRelease.ParseLatest(json);
         Assert.IsNotNull(release);
         Assert.AreEqual("club", release.Title);
-        Assert.IsTrue(release.IsNewerThan(ClubRelease.CurrentTag));
+        Assert.IsTrue(release.IsNewerThan("conduit-v2.15.1-club.1"));
+        Assert.IsFalse(release.IsNewerThan(ClubRelease.CurrentTag));
         Assert.IsFalse(release.IsNewerThan("conduit-v2.15.1-club.10"));
     }
 

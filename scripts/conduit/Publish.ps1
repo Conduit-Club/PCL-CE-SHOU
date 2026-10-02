@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [ValidateSet('x64', 'ARM64')][string]$Architecture = 'x64',
+    [ValidateSet('Beta', 'Release')][string]$Configuration = 'Beta',
     [string]$Dotnet = 'dotnet',
     [string]$OutputRoot = 'artifacts/conduit',
     [string]$EnvFile = '.env'
@@ -37,9 +38,9 @@ try {
     $env:PCL_GITHUB_SHA = git rev-parse HEAD
     if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve source commit.' }
     # Force regeneration when .env changes; compiler servers can retain stale environment values.
-    & $Dotnet clean 'Plain Craft Launcher 2/Plain Craft Launcher 2.csproj' -c Beta "-p:Platform=$Architecture" -v quiet
+    & $Dotnet clean 'Plain Craft Launcher 2/Plain Craft Launcher 2.csproj' -c $Configuration "-p:Platform=$Architecture" -v quiet
     if ($LASTEXITCODE -ne 0) { throw "dotnet clean failed: $LASTEXITCODE" }
-    & $Dotnet publish 'Plain Craft Launcher 2/Plain Craft Launcher 2.csproj' -c Beta "-p:Platform=$Architecture" -p:UseSharedCompilation=false --self-contained true -o $output
+    & $Dotnet publish 'Plain Craft Launcher 2/Plain Craft Launcher 2.csproj' -c $Configuration "-p:Platform=$Architecture" -p:UseSharedCompilation=false --self-contained true -o $output
     if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed: $LASTEXITCODE" }
     $name = "PCL-CE-SHOU-win-$($Architecture.ToLowerInvariant())"
     Move-Item -LiteralPath (Join-Path $output 'Plain Craft Launcher 2.exe') -Destination (Join-Path $output "$name.exe")
@@ -52,7 +53,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve SDK version.' }
     $sourceState = if (git status --porcelain) { 'modified working tree (includes uncommitted changes)' } else { 'clean' }
     $appConfigured = -not [string]::IsNullOrWhiteSpace($clientId)
-    "Source base commit: $commit`nSource state: $sourceState`nSDK: $sdk`nConfiguration: Beta`nRuntime: win-$($Architecture.ToLowerInvariant())`nSelf-contained: true`nMicrosoft public Client ID configured: $appConfigured`nOther service credentials: not embedded" | Set-Content (Join-Path $output 'BUILD-INFO.txt') -Encoding utf8
+    "Source base commit: $commit`nSource state: $sourceState`nSDK: $sdk`nConfiguration: $Configuration`nRuntime: win-$($Architecture.ToLowerInvariant())`nSelf-contained: true`nMicrosoft public Client ID configured: $appConfigured`nOther service credentials: not embedded" | Set-Content (Join-Path $output 'BUILD-INFO.txt') -Encoding utf8
     $archive = Join-Path (Split-Path $output) "$name.zip"
     Compress-Archive -Path "$output/*" -DestinationPath $archive
     $hash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()

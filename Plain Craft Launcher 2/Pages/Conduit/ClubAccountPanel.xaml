@@ -21,9 +21,9 @@
 </UserControl.Resources>
  <StackPanel>
   <UniformGrid Columns="3" Margin="0,0,0,6">
-   <Button x:Name="MuaButton" Content="MUA (0)" Tag="mua" Click="Provider_Click" Style="{StaticResource ClubActionButton}" Height="34" Margin="0,0,3,0" FontSize="11" />
-   <Button x:Name="LittleButton" Content="LittleSkin (0)" Tag="littleskin" Click="Provider_Click" Style="{StaticResource ClubActionButton}" Height="34" Margin="0,0,3,0" FontSize="11" />
-   <Button x:Name="MicrosoftButton" Content="微软 (0)" Tag="microsoft" Click="Provider_Click" Style="{StaticResource ClubActionButton}" Height="34" FontSize="11" />
+   <Button x:Name="MicrosoftButton" Content="微软(正版) (0)" Tag="microsoft" Click="Provider_Click" Style="{StaticResource ClubActionButton}" Height="34" Margin="0,0,3,0" FontSize="10" />
+   <Button x:Name="LittleButton" Content="LittleSkin (0)" Tag="littleskin" Click="Provider_Click" Style="{StaticResource ClubActionButton}" Height="34" Margin="0,0,3,0" FontSize="10" />
+   <Button x:Name="MuaButton" Content="MUA (0)" Tag="mua" Click="Provider_Click" Style="{StaticResource ClubActionButton}" Height="34" FontSize="10" />
   </UniformGrid>
   <DockPanel Margin="0,2,0,4">
    <Button Content="其他" Tag="other" Click="Provider_Click" DockPanel.Dock="Right" Style="{StaticResource ClubActionButton}" Padding="6,2" FontSize="11" />
@@ -42,7 +42,7 @@
   <TextBlock x:Name="LoginStatus" FontSize="10" TextWrapping="Wrap" Margin="0,4" Opacity="0.7" />
   <DockPanel>
    <local:MyButton Text="微软登录配置" Click="MicrosoftConfig_Click" Height="25" Padding="6,0" DockPanel.Dock="Right" />
-   <TextBlock x:Name="MicrosoftStatus" FontSize="10" VerticalAlignment="Center" Opacity="0.7" />
+   <TextBlock x:Name="MicrosoftStatus" FontSize="10" VerticalAlignment="Center" TextWrapping="Wrap" Opacity="0.7" />
   </DockPanel>
  </StackPanel>
 </UserControl>

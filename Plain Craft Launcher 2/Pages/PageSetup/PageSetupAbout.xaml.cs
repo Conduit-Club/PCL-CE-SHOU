@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Input;
 using PCL.Core.App.Localization;
+using PCL.Core.Conduit;
 using PCL.Core.IO.Net.Http;
 using PCL.Core.Utils;
 
@@ -36,6 +37,7 @@ public partial class PageSetupAbout
         ItemAboutPcl.Info = ItemAboutPcl.Info.Replace("%VERSION%", ModBase.versionBaseName)
             .Replace("%VERSIONCODE%", ModBase.versionCode.ToString()).Replace("%BRANCH%", ModBase.versionBranchName)
             .Replace("%COMMIT_HASH%", ModBase.commitHashShort);
+        ClubReleaseIdentity.Text = $"发行版本 v{ClubRelease.CurrentVersion} · 代号 {ClubRelease.CurrentCodename}";
 
         if (!Lang.IsChineseMainland)
         {

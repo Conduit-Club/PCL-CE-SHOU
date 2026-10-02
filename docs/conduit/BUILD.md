@@ -6,7 +6,7 @@
 
 - 只同步 `PCL-Community/PCL-CE` 的 `dev`，不直接同步 PCL。
 - 2026-10-02 基线：`a42a7699948aebd1e2563df025274af255c1f559`，相对原仓库快进 13 个提交，无合并冲突。
-- 初始上游元数据版本：`2.15.1-beta.1`；发行标签另加 `conduit-` 前缀，不冒充 CE 官方发行版。
+- 直接 PCL-CE 基线版本：`2.15.1`；社团首发元数据版本为 `1.0.0`，正式发行标签使用 `v` 前缀，同时兼容读取旧 `conduit-v` 标签，不冒充 CE 官方发行版。
 
 ## 环境
 
@@ -16,10 +16,11 @@ SDK 通过微软官方 `https://dot.net/v1/dotnet-install.ps1` 安装，使用 `
 
 ```powershell
 ./scripts/conduit/Publish.ps1 -Dotnet D:\Programs_Dev\dotnet\dotnet.exe
+./scripts/conduit/Publish.ps1 -Configuration Release -Dotnet D:\Programs_Dev\dotnet\dotnet.exe -OutputRoot artifacts/conduit-release
 dotnet test PCL.Core.Test/PCL.Core.Test.csproj -c Beta -p:Platform=x64
 ```
 
-脚本默认构建 Windows x64、Beta、自包含单文件程序；输出到 `artifacts/conduit`，ZIP 内含 EXE、许可文件及构建信息。无需额外安装 .NET 运行时，不是 MSI/Setup 安装向导。可通过 `-OutputRoot artifacts/conduit-club1` 指定新输出目录；保留旧目录可避免混入旧文件。可使用 `-Architecture ARM64` 交叉编译，但不能替代 ARM64 真机验证。
+脚本默认构建 Windows x64、Beta、自包含单文件程序；正式首发可传入 `-Configuration Release`，输出到 `artifacts/conduit`（或显式指定的新目录），ZIP 内含 EXE、许可文件及构建信息。无需额外安装 .NET 运行时，不是 MSI/Setup 安装向导。可通过 `-OutputRoot artifacts/conduit-club1` 指定新输出目录；保留旧目录可避免混入旧文件。可使用 `-Architecture ARM64` 交叉编译，但不能替代 ARM64 真机验证。
 
 ## 发布
 
@@ -33,7 +34,7 @@ GitHub Actions 使用仓库 Secret `CLIENT_ID` 映射为 `PCL_MS_CLIENT_ID`。�
 
 2026-10-02 已配置 `CLIENT_ID`。其他上游 Secrets（CurseForge、Natayark、联机、遥测等）没有社团自己的可用值，未配置假值，也未复制上游凭据。原 CE GPG / MirrorChyan 发行工作流在社团仓库保持禁用。微软应用注册及注入成功不等于 Minecraft API 审核通过，仍需完成审核与实际登录验证。
 
-`Conduit Build` 工作流可在 GitHub Actions 手动运行，会上传 x64 构建产物，不使用上游密钥或镜像服务。本地构建后通过 `gh release create` 发布 ZIP 和 SHA-256 文件；先推送源码，再将 Release 固定到已验证的源码提交，开发基线标记为 prerelease。
+`Conduit Build` 工作流可在 GitHub Actions 手动运行，会上传 x64 构建产物，不使用上游密钥或镜像服务。正式 v1.0.0 发布前，先完成 root 代理统一编译、专项测试和实际授权确认；随后再通过 `gh release create` 发布 ZIP 和 SHA-256 文件。当前尚未创建正式 tag 或 Release，不能把开发构建链接当作正式下载地址。
 
 原 CE Release 工作流仅在 `PCL-Community/PCL-CE` 仓库运行，避免重写社团 Release 说明、要求 CE 签名密钥或触发上游 MirrorChyan 上传。这是对上游工作流的少量必要差异，未来同步时需保留并检查。
 

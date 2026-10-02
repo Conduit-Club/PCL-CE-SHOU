@@ -16,7 +16,8 @@ public partial class ClubAccountPanel : UserControl
     private string? _lastCurrent;
     private volatile bool _otherBusy;
     private string _editingProvider = "";
-    private string _filter = "mua";
+    private string _filter = "microsoft";
+    private bool _defaultLoginPageRequested;
 
     public ClubAccountPanel()
     {
@@ -25,13 +26,16 @@ public partial class ClubAccountPanel : UserControl
         {
             RefreshAccounts();
             _timer.Start();
+            RequestDefaultMicrosoftLoginPage();
         };
         Unloaded += (_, _) => { _timer.Stop(); };
         _timer.Tick += (_, _) => RefreshAccounts();
     }
     private void RefreshAccounts()
     {
-        MicrosoftStatus.Text = MicrosoftConfigured ? "微软已配置" : "微软未配置";
+        MicrosoftStatus.Text = ClubCatalog.MicrosoftApiReady
+            ? MicrosoftClientConfigured ? "微软已配置" : "微软未配置"
+            : "微软登录尚未开通，请先使用 LittleSkin 或 MUA。";
         LoginStatus.Text = _otherBusy ? "正在选择或探测认证服务，请稍候。" : AuthenticationBusy ? "正在验证账户；请先在登录窗口完成或取消授权。"
             : ProfileService.IsCreatingProfile && _editingProvider != "" ? $"正在添加：{_editingProvider}。可直接点击其他登录方式切换。"
             : "添加账户不会移除已保存的其他账户。";
@@ -47,7 +51,7 @@ public partial class ClubAccountPanel : UserControl
         _snapshot = snapshot;
         MuaButton.Content = $"MUA ({profiles.Count(p => Provider(p) == "mua")})";
         LittleButton.Content = $"LittleSkin ({profiles.Count(p => Provider(p) == "littleskin")})";
-        MicrosoftButton.Content = $"微软 ({profiles.Count(p => Provider(p) == "microsoft")})";
+        MicrosoftButton.Content = $"微软(正版) ({profiles.Count(p => Provider(p) == "microsoft")})";
         var filtered = profiles.Where(p => Provider(p) == _filter).ToArray();
         Accounts.ItemsSource = filtered.Select(p => new { Profile = p, Title = $"{p.UserName}（{ClubCatalog.AccountSource(p)}）" + (p.ProfileId == current ? " ✓" : ""), Info = ClubCatalog.AccountStatus(p) }).ToArray();
         AccountSummary.Text = _filter switch { "mua" => "MUA Union", "littleskin" => "LittleSkin", "microsoft" => "微软正版", _ => "其他账户" };
@@ -88,7 +92,7 @@ public partial class ClubAccountPanel : UserControl
     }
     private void OpenProvider(string provider)
     {
-        if (provider == "microsoft" && !MicrosoftConfigured && !ConfigureMicrosoft()) return;
+        if (provider == "microsoft" && ClubCatalog.MicrosoftApiReady && !MicrosoftClientConfigured && !ConfigureMicrosoft()) return;
         ClearEditing();
         if (provider == "other")
         {
@@ -145,11 +149,31 @@ public partial class ClubAccountPanel : UserControl
         ModMain.frmLaunchLeft.RefreshPage(false);
         RefreshAccounts();
     }
-    private static bool MicrosoftConfigured => !string.IsNullOrWhiteSpace(Config.System.ClubMicrosoftClientId) || !string.IsNullOrWhiteSpace(Secrets.MSOAuthClientId);
+    private static bool MicrosoftClientConfigured => !string.IsNullOrWhiteSpace(Config.System.ClubMicrosoftClientId) || !string.IsNullOrWhiteSpace(Secrets.MSOAuthClientId);
     private void MicrosoftConfig_Click(object sender, MouseButtonEventArgs e)
     {
         if (!CanChangeAccount()) return;
+        if (!ClubCatalog.MicrosoftApiReady)
+        {
+            ShowMicrosoftUnavailable();
+            return;
+        }
         ConfigureMicrosoft();
+    }
+
+    private static void ShowMicrosoftUnavailable()
+        => HintService.Hint("社团 Microsoft 登录尚未开通，API 申请与配置仍在处理中，请先使用 LittleSkin 或 MUA。", HintType.Warning);
+
+    private void RequestDefaultMicrosoftLoginPage()
+    {
+        if (_defaultLoginPageRequested || ProfileService.Current is not null || ProfileService.IsCreatingProfile)
+            return;
+        _defaultLoginPageRequested = true;
+        Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
+        {
+            if (ProfileService.Current is null && !ProfileService.IsCreatingProfile && ModMain.frmLaunchLeft is not null)
+                ModMain.frmLaunchLeft.RefreshPage(false, ModLaunch.McLoginType.Ms);
+        }));
     }
     private bool ConfigureMicrosoft()
     {
