@@ -54,7 +54,7 @@ public partial class ClubAccountPanel : UserControl
         EmptyHint.Visibility = filtered.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
     }
     private static string Provider(McProfile p) => p.ProfileType == ProfileType.Microsoft ? "microsoft"
-        : ClubCatalog.IsProvider(p.Server, ClubCatalog.MuaAuth) ? "mua"
+        : ClubCatalog.IsMuaProvider(p.Server) ? "mua"
         : ClubCatalog.IsProvider(p.Server, ClubCatalog.LittleSkinAuth) ? "littleskin" : "other";
     private void Provider_Click(object sender, RoutedEventArgs e)
     {

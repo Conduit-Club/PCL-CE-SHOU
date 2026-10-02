@@ -14,7 +14,11 @@ public static class ClubCatalog
 {
     public const string Website = "https://conduit-club.github.io/";
     public const string Repository = "https://github.com/Conduit-Club/PCL-CE-SHOU";
-    public const string MuaAuth = "https://skin.mualliance.ltd/api/union/yggdrasil";
+    // MUA Union is a server-side aggregation API. Players authenticate against
+    // the member skin site, while the Union endpoint is retained for existing
+    // profiles and server compatibility.
+    public const string MuaAuth = "https://skin.mualliance.ltd/api/yggdrasil";
+    public const string MuaUnionAuth = "https://skin.mualliance.ltd/api/union/yggdrasil";
     public const string LittleSkinAuth = "https://littleskin.cn/api/yggdrasil";
     public static IReadOnlyList<ClubServer> Servers { get; } = Array.AsReadOnly(new[]
     {
@@ -36,7 +40,14 @@ public static class ClubCatalog
 
     public static bool CanJoin(McProfile profile) => profile.ProfileType == ProfileType.Microsoft
         || (profile.ProfileType is ProfileType.Authlib or ProfileType.YggdrasilConnect
-            && (IsProvider(profile.Server, MuaAuth) || IsProvider(profile.Server, LittleSkinAuth)));
+            && (IsMuaProvider(profile.Server) || IsProvider(profile.Server, LittleSkinAuth)));
+
+    /// <summary>
+    /// Recognizes both the current member-site login API and the legacy Union
+    /// API used by profiles created before the login endpoint was corrected.
+    /// </summary>
+    public static bool IsMuaProvider(string? address)
+        => IsProvider(address, MuaAuth) || IsProvider(address, MuaUnionAuth);
 
     public static bool IsProvider(string? address, string expected)
     {
@@ -51,7 +62,7 @@ public static class ClubCatalog
     {
         ProfileType.Microsoft => "微软正版",
         ProfileType.Offline => "离线账户 · 无法进入社团服务器",
-        _ when IsProvider(profile.Server, MuaAuth) => "MUA Union",
+        _ when IsMuaProvider(profile.Server) => "MUA Union",
         _ when IsProvider(profile.Server, LittleSkinAuth) => "LittleSkin",
         _ => "第三方 · " + (profile.ServerName ?? profile.Server ?? "自定义认证")
     };

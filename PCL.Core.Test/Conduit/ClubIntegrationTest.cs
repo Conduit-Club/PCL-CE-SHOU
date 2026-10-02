@@ -23,6 +23,19 @@ public class ClubIntegrationTest
         => Assert.AreEqual(expected, ClubCatalog.IsProvider(address, ClubCatalog.LittleSkinAuth));
 
     [TestMethod]
+    public void MuaLoginUsesMemberSiteAndKeepsLegacyUnionProfilesRecognized()
+    {
+        Assert.AreEqual("https://skin.mualliance.ltd/api/yggdrasil", ClubCatalog.MuaAuth);
+        Assert.IsTrue(ClubCatalog.IsMuaProvider(ClubCatalog.MuaAuth));
+        Assert.IsTrue(ClubCatalog.IsMuaProvider(ClubCatalog.MuaUnionAuth));
+        Assert.IsFalse(ClubCatalog.IsProvider(ClubCatalog.MuaUnionAuth, ClubCatalog.MuaAuth));
+
+        var legacy = new McProfile { ProfileType = ProfileType.Authlib, Server = ClubCatalog.MuaUnionAuth };
+        Assert.IsTrue(ClubCatalog.CanJoin(legacy));
+        Assert.AreEqual("MUA Union", ClubCatalog.AccountSource(legacy));
+    }
+
+    [TestMethod]
     public void SamePlayerNameCanSwitchBetweenIndependentProvidersAndPersist()
     {
         var manager = new ProfileManagement<McProfile>();
