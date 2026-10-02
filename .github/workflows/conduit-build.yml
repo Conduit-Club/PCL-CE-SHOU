@@ -10,6 +10,7 @@ jobs:
   build:
     if: github.repository == 'Conduit-Club/PCL-CE-SHOU'
     runs-on: windows-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-dotnet@v5
@@ -18,9 +19,6 @@ jobs:
       - name: Publish baseline
         shell: pwsh
         run: ./scripts/conduit/Publish.ps1
-      - name: Test
-        shell: pwsh
-        run: dotnet test PCL.Core.Test/PCL.Core.Test.csproj -c Beta -p:Platform=x64
       - uses: actions/upload-artifact@v7
         with:
           name: PCL-CE-SHOU-win-x64
@@ -28,3 +26,13 @@ jobs:
             artifacts/conduit/*.zip
             artifacts/conduit/*.sha256
           if-no-files-found: error
+      - name: Test
+        shell: pwsh
+        run: dotnet test PCL.Core.Test/PCL.Core.Test.csproj -c Beta -p:Platform=x64 --blame-hang-timeout 2m --logger trx --results-directory artifacts/test-results
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: artifacts/test-results/**/*.trx
+          if-no-files-found: warn
