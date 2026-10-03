@@ -14,6 +14,8 @@
 
 > **v1.0.0（zst）**：社团首发版本。Windows x64 自包含下载包与 SHA-256 校验文件见[社团 Releases](https://github.com/Conduit-Club/PCL-CE-SHOU/releases)，功能边界与验证说明见[首发说明](docs/conduit/RELEASE-v1.0.0.md)。
 
+> **v1.1.0（sxj，审核中）**：当前 PR 的候选版本，尚未创建正式 Release；审核期间请继续使用上方 v1.0.0 正式发行包。
+
 ## 五湖四海之士，汇于东海之滨
 
 潮涌核心社希望把校园、记忆与新的创作汇聚在同一片 Minecraft 空间。社团服务器包含长期建设的 **SMP 多人生存服**、用于地皮与大型作品制作的 **Create 创造建筑服**，以及承载校园还原作品的 **SHOU 建筑展示服**。启动器的首页、服务器入口和更新提醒都围绕这套真实运行的社团网络设计。
@@ -41,11 +43,11 @@
 
 | 账户来源 | 说明 |
 | --- | --- |
-| Microsoft | 原版 Microsoft 账户。账户页首次先显示此入口，但社团应用审核尚未完成，当前明确提示未开通并阻止授权。 |
+| Microsoft | 原版 Microsoft 账户。社团应用审核已获准，当前构建已启用此入口；实际授权与 Minecraft 服务联调仍需使用测试账户确认。 |
 | MUA Union | MUA Union 第三方账户。首次使用时在 MUA 皮肤站注册并验证邮箱；随后在启动器选择 MUA Union，填写该皮肤站的邮箱和密码。旧 Union 地址档案若无法登录，请移除后通过 MUA 入口重新添加。Union 聚合地址用于服务器端认证配置，不是启动器账号登录 API，也无需填入 Minecraft 服务器地址栏。 |
 | LittleSkin | LittleSkin 第三方账户。启动器支持按登录页提供的密码登录路线操作，不需要额外的 app ID；若使用 OAuth 设备授权，则需要符合 LittleSkin 的应用 ID 与白名单要求。 |
 
-> **验证边界**：LittleSkin 与 MUA 的皮肤站邮箱密码登录路线已由用户实际确认可用；Microsoft 授权仍因社团 API 审核未完成而禁用，令牌刷新、角色切换与 Minecraft 端联机不在本次密码登录确认范围内。遇到登录问题时，请先查看[社团服务器认证说明](https://conduit-club.github.io/servers/velocity/)。
+> **验证边界**：LittleSkin 与 MUA 的皮肤站邮箱密码登录路线已由用户实际确认可用；Microsoft 应用审核已获准，但实际授权、令牌刷新、角色切换与 Minecraft 端联机仍需使用测试账户确认。遇到登录问题时，请先查看[社团服务器认证说明](https://conduit-club.github.io/servers/velocity/)。
 
 ## 三步开始游玩
 

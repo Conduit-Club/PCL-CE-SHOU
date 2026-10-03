@@ -6,7 +6,7 @@
 
 - 只同步 `PCL-Community/PCL-CE` 的 `dev`，不直接同步 PCL。
 - 2026-10-02 基线：`a42a7699948aebd1e2563df025274af255c1f559`，相对原仓库快进 13 个提交，无合并冲突。
-- 直接 PCL-CE 基线版本：`2.15.1`；社团首发元数据版本为 `1.0.0`，正式发行标签使用 `v` 前缀，同时兼容读取旧 `conduit-v` 标签，不冒充 CE 官方发行版。
+- 直接 PCL-CE 基线版本：`2.15.1`；社团 `v1.0.0`（zst）已正式发布，当前 PR 准备 `v1.1.0`（sxj）审核版本。正式发行标签使用 `v` 前缀，同时兼容读取旧 `conduit-v` 标签，不冒充 CE 官方发行版。
 
 ## 环境
 
@@ -32,9 +32,9 @@ dotnet test PCL.Core.Test/PCL.Core.Test.csproj -c Beta -p:Platform=x64
 
 GitHub Actions 使用仓库 Secret `CLIENT_ID` 映射为 `PCL_MS_CLIENT_ID`。社团工作流在 PR、`dev` push 和手动运行时构建，分开运行社团回归与全量测试；全量测试失败仍保留失败状态和 TRX 报告。Fork PR 无法读取仓库 Secrets，仍可执行无 Client ID 编译。
 
-2026-10-02 已配置 `CLIENT_ID`。其他上游 Secrets（CurseForge、Natayark、联机、遥测等）没有社团自己的可用值，未配置假值，也未复制上游凭据。原 CE GPG / MirrorChyan 发行工作流在社团仓库保持禁用。微软应用注册及注入成功不等于 Minecraft API 审核通过，仍需完成审核与实际登录验证。
+2026-10-03 已配置并审核通过 `CLIENT_ID`。其他上游 Secrets（CurseForge、Natayark、联机、遥测等）没有社团自己的可用值，未配置假值，也未复制上游凭据。原 CE GPG / MirrorChyan 发行工作流在社团仓库保持禁用。微软应用注入已验证，真实账户授权与 Minecraft 服务联调仍需单独确认。
 
-`Conduit Build` 工作流可在 GitHub Actions 手动运行，会上传 x64 构建产物，不使用上游密钥或镜像服务。正式 v1.0.0 发布前，先完成 root 代理统一编译、专项测试和实际授权确认；随后再通过 `gh release create` 发布 ZIP 和 SHA-256 文件。当前尚未创建正式 tag 或 Release，不能把开发构建链接当作正式下载地址。
+`Conduit Build` 工作流可在 GitHub Actions 手动运行，会上传 x64 构建产物，不使用上游密钥或镜像服务。v1.0.0 已有正式 tag 与 Release；v1.1.0 仍需完成审核、统一编译和必要验证后，再通过 `gh release create` 发布 ZIP 和 SHA-256 文件。审核期间不能把 PR 或开发构建链接当作 v1.1.0 正式下载地址。
 
 原 CE Release 工作流仅在 `PCL-Community/PCL-CE` 仓库运行，避免重写社团 Release 说明、要求 CE 签名密钥或触发上游 MirrorChyan 上传。这是对上游工作流的少量必要差异，未来同步时需保留并检查。
 
