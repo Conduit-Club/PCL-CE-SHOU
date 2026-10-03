@@ -473,24 +473,29 @@ public static class ClubUpdates
             if (!ClubUpdateNoticeParser.ShouldNotify(notice, currentDate))
                 return;
 
-            // The checks above establish that the dialog can be presented. Persist only after
-            // enqueueing succeeds, so merely downloading the index never consumes an unread notice.
+            // The checks above establish that the dialog can be presented. Mark it before entering
+            // the modal wait so closing the launcher while it is visible cannot show it again next
+            // time. If enqueueing or displaying the dialog fails, restore the previous value.
             var previousId = States.System.ClubUpdateNoticeLastId;
+            int result;
             try
             {
-                ModMain.MyMsgBox(
+                States.System.ClubUpdateNoticeLastId = notice.Id;
+                result = ModMain.MyMsgBox(
                     $"日期：{notice.DateText}\r\n\r\n{notice.Title}\r\n\r\n可点击“查看日志”阅读全部社团更新记录。",
                     "发现社团更新日志",
                     "查看日志",
-                    "稍后",
-                    button1Action: ShowHistory);
-                States.System.ClubUpdateNoticeLastId = notice.Id;
+                    "稍后");
             }
             catch
             {
                 States.System.ClubUpdateNoticeLastId = previousId;
                 throw;
             }
+
+            // The standard button closes the notice before this callback queues the history panel.
+            if (result == 1)
+                ShowHistory();
         }
         catch (Exception ex)
         {

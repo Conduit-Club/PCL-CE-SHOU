@@ -48,13 +48,11 @@ public partial class ClubAccountPanel : UserControl
             !AuthenticationBusy && !ModLaunch.isLaunching && ModMain.frmLaunchLeft is not null &&
             !ModMain.frmLaunchLeft.IsShowingAllProfiles)
         {
-            if (current?.ToString() != _lastCurrent)
-                _restoreAllAfterCreate = false;
-            else
-            {
-                ModMain.frmLaunchLeft.ShowAllProfiles();
-                _restoreAllAfterCreate = false;
-            }
+            // A successful login may select the new profile, so Current is
+            // expected to differ from _lastCurrent here. Restore the complete
+            // profile list regardless of that selection change.
+            ModMain.frmLaunchLeft.ShowAllProfiles();
+            _restoreAllAfterCreate = false;
         }
         _lastCurrent = current?.ToString();
         var snapshot = string.Join("|", profiles.Select(p => $"{p.ProfileId}:{p.UserName}:{p.Server}:{p.ServerName}:{p.SkinHeadId}:{p.ProfileType}:{ClubCatalog.AccountStatus(p)}")) + current;
@@ -102,11 +100,13 @@ public partial class ClubAccountPanel : UserControl
     private void Provider_Click(object sender, RoutedEventArgs e)
     {
         if (!CanChangeAccount()) return;
+        // Clicking a provider is an explicit navigation choice. It must not
+        // inherit the pending all-profiles restoration from an earlier add.
+        _restoreAllAfterCreate = false;
         var requestedFilter = ((FrameworkElement)sender).Tag?.ToString() ?? "other";
         if (requestedFilter == "all" && _filter == "all")
         {
             _filter = "microsoft";
-            _restoreAllAfterCreate = false;
             ModMain.frmLaunchLeft.ClearAllProfiles();
             var microsoftProfiles = ProfileService.Profiles.Where(p => Provider(p) == "microsoft").ToArray();
             if (microsoftProfiles.Length > 0)
@@ -121,7 +121,6 @@ public partial class ClubAccountPanel : UserControl
         if (_filter == "all")
         {
             ClearEditing();
-            _restoreAllAfterCreate = false;
             ModMain.frmLaunchLeft.ShowAllProfiles();
             RefreshAccounts();
             return;
@@ -142,6 +141,7 @@ public partial class ClubAccountPanel : UserControl
             _RestoreCurrentSelection();
             return;
         }
+        _restoreAllAfterCreate = false;
         if (e.AddedItems[0] is AccountListItem item) SelectAccount(item.Profile);
     }
 
