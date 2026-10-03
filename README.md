@@ -14,7 +14,7 @@
 
 > **v1.0.0（zst）**：社团首发版本。Windows x64 自包含下载包与 SHA-256 校验文件见[社团 Releases](https://github.com/Conduit-Club/PCL-CE-SHOU/releases)，功能边界与验证说明见[首发说明](docs/conduit/RELEASE-v1.0.0.md)。
 
-> **v1.1.0（sxj，审核中）**：当前 PR 的候选版本，尚未创建正式 Release；审核期间请继续使用上方 v1.0.0 正式发行包。
+> **当前版本目标：v1.1.0（sxj）**：候选功能与验证范围见[发行说明](docs/conduit/RELEASE-v1.1.0.md)。已发布包请以[社团 Releases](https://github.com/Conduit-Club/PCL-CE-SHOU/releases)页面显示的版本为准；v1.0.0 首发说明仍保留供历史参考。
 
 ## 五湖四海之士，汇于东海之滨
 
@@ -51,7 +51,7 @@
 
 ## 三步开始游玩
 
-1. **获取启动器**：从[社团 Releases](https://github.com/Conduit-Club/PCL-CE-SHOU/releases)下载 v1.0.0 Windows x64 自包含包，并使用旁侧的 SHA-256 文件校验完整性。
+1. **获取启动器**：从[社团 Releases](https://github.com/Conduit-Club/PCL-CE-SHOU/releases)下载页面显示的最新 Windows x64 自包含包，并使用旁侧的 SHA-256 文件校验完整性。
 2. **添加账户**：在启动器中添加并选择 Microsoft、MUA Union 或 LittleSkin 账户；MUA Union 用户先在皮肤站注册并验证邮箱，再填写皮肤站邮箱和密码。
 3. **准备实例并选择服务器**：先下载或选择一个游戏实例（推荐 **1.21.1**），再在主页选择 SMP、Create 或 SHOU 后启动游戏；若只想进入游戏再手动选服，可选择“只启动游戏”，进入代理后使用 `/server smp`、`/server create` 或 `/server shou`。
 
@@ -74,7 +74,7 @@
 
 ## 下载与开发
 
-v1.0.0 是 Conduit-Club 基于 PCL-CE 的独立第三方发行版；请从[社团 Releases](https://github.com/Conduit-Club/PCL-CE-SHOU/releases)获取正式包，不要把上游 PCL-CE 的版本号、下载统计或发行包当作潮涌核心社版本。
+当前版本目标为 v1.1.0（sxj）。Conduit-Club 基于 PCL-CE 维护独立第三方发行版；正式包与历史 v1.0.0 包均请从[社团 Releases](https://github.com/Conduit-Club/PCL-CE-SHOU/releases)获取，不要把上游 PCL-CE 的版本号、下载统计或发行包当作潮涌核心社版本。
 
 社团发行目标为 **Windows x64 自包含程序**，运行时无需另外安装 .NET Runtime，但启动 Minecraft 仍需要可用的 Java 运行时。若要从源码构建，请先阅读[社团构建说明](docs/conduit/BUILD.md)；构建使用 **.NET 10 SDK**，入口为 [`scripts/conduit/Publish.ps1`](scripts/conduit/Publish.ps1)。
 
